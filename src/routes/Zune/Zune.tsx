@@ -71,11 +71,11 @@ class Zune extends Component {
                 <div className='control wheel'></div>
                 <div className='control toggle'></div>
                 {setupPlayer()};
-        <button type='button' onClick={()=>{startPlayback(player)}}>START</button>
-
-        <button type='button' onClick={()=>{togglePlayer(player)}}>PLAY/PAUSE</button>
-        <button type='button' onClick={()=>{nextTrack(player)}}>NEXT</button>
-        <button type='button' onClick={()=>{prevTrack(player)}}>PREVIOUS</button>            </div>
+            </div>
+            <button type='button' onClick={()=>{startPlayback(player)}}>START</button>
+            <button type='button' onClick={()=>{togglePlayer(player)}}>PLAY/PAUSE</button>
+            <button type='button' onClick={()=>{nextTrack(player)}}>NEXT</button>
+            <button type='button' onClick={()=>{prevTrack(player)}}>PREVIOUS</button>            
         </div>
     );
   }
