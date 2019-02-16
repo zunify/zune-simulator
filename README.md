@@ -1,2 +1,2 @@
-# zunify-web
+# zune-simulator
 Zune simulator
