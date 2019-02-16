@@ -1,0 +1,61 @@
+.Zune {
+    height: calc(100VH - 1rem);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1rem 0rem 1rem;
+    background: #0F2027;  /* fallback for old browsers */
+    background: -webkit-radial-gradient(#2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
+    background: radial-gradient(#2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+
+.border {
+    flex: 2;
+    display: block;
+    padding: 1rem;
+    background-color: #382525;
+    border-radius: 0.5rem;
+}
+.screen {
+    width: 100%;
+    height: 100%;
+    background-color: lightgray;
+    border-radius: 0.5rem;
+
+}
+
+.controls {
+    flex: 1;
+    align-items: center;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.control {
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    margin: 0.6rem;
+    background-color: #625256;
+}
+
+.wheel {
+    width: 150px;
+    height: 150px;
+    background: -webkit-radial-gradient(#967079, #625256);  /* Chrome 10-25, Safari 5.1-6 */
+    background: radial-gradient(#967079, #625256); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+}
+
+
+.back {
+}
+
+
+.toggle {
+}
+
+/* .control {
+    justify-content: space-evenly;
+} */
