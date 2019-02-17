@@ -88,7 +88,11 @@ class Zune extends Component<{location: any}, State> {
         //Logic that builds the url and returns it
       const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
       const redirect_uri = 'http://localhost:3000/';
+<<<<<<< Updated upstream
       var scopes = 'streaming user-read-birthdate user-read-email user-read-private user-read-currently-playing user-read-playback-state user-read-recently-played user-modify-playback-state';
+=======
+      var scopes = 'streaming user-read-birthdate user-read-email user-read-private user-read-currently-playing user-read-playback-state playlist-read-private';
+>>>>>>> Stashed changes
       const url = 'https://accounts.spotify.com/authorize' +
       '?response_type=token' +
       '&client_id=' + my_client_id +
@@ -153,6 +157,15 @@ class Zune extends Component<{location: any}, State> {
       return response;
     }
 
+    private getPlaylists = async () => {
+      const response = await fetch('https://api.spotify.com/v1/me/playlists', { 
+        method: 'get', 
+        headers: new Headers({
+          'Authorization': `Bearer ${this.state.token!}`
+        })
+      });
+      return response;
+    }
     // private loginButton = () => {
     //   const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
     //   const redirect_uri = 'http://localhost:3000/';
