@@ -43,7 +43,7 @@ class Zune extends Component<{location: any}, State> {
         const loginScreen = (
             <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                 <img height='200' src='./zune.svg' />
-                <Button style={{marginTop: '1rem'}} type='primary' href={this.authUrl()} >Login</Button>
+                <Button style={{marginTop: '1rem', backgroundColor: '#1ed760'}} type='primary' href={this.authUrl()} ><i style={{marginRight: '1rem'}} className="fab fa-spotify"></i>Login</Button>
             </div>
         ) 
 
@@ -163,7 +163,7 @@ class Zune extends Component<{location: any}, State> {
             await setTimeout( async () => { const currState = await player.getCurrentState()
               if (currState)
                 !currState.paused ? this.togglePlayer(player) : null;
-            },520);
+            },525);
         } else {
             console.log('aslkdlaksjdfhlkajshdflkajshdfl')
         }
