@@ -50,7 +50,6 @@ class Zune extends Component<{location: any}, State> {
     }
     componentWillMount() {
         //Check for code in url
-        console.log(this.props.location.search.split('=')[1])
         this.setState({token: this.props.location.hash ? this.props.location.hash.split('=')[1]:null})
         console.log(this.props.location)
         if(this.props.location.hash.split('=')[1]){
@@ -63,19 +62,21 @@ class Zune extends Component<{location: any}, State> {
 
         }
         return (
-            <div className="Zune">
-                <div className='border'>
-                    <div className='screen'>
-                        <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                            <img height='200' src='./zune.svg' />
-                            <Button style={{marginTop: '1rem'}} type='primary' href={this.authUrl()} >Login</Button>
+            <div className='background'>
+                <div className="Zune">
+                    <div className='border'>
+                        <div className='screen'>
+                            <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                <img height='200' src='./zune.svg' />
+                                <Button style={{marginTop: '1rem'}} type='primary' href={this.authUrl()} >Login</Button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className='controls'>
-                    <div className='control back'><i className="fas fa-arrow-left"></i></div>
-                    <div className='control wheel'></div>
-                    <button type='button' onClick={()=>{console.log('asd'); this.togglePlayer(player)}} className='control toggle'><i className="fas fa-play"></i></button>
+                    <div className='controls'>
+                        <div className='control back'><i className="fas fa-arrow-left"></i></div>
+                        <div className='control wheel'></div>
+                        <button type='button' onClick={()=>{this.togglePlayer(player)}} className='control toggle'><i className="fas fa-play"></i></button>
+                    </div>
                 </div>
             </div>
         );
