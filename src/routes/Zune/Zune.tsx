@@ -7,7 +7,6 @@ import './Zune.css'
 
 let player:Spotify.SpotifyPlayer;
 
-const token = 'BQBWDtEU4UddAik38pbZFzvb_3tnK767ipt-cPql--vhwSxTTfwoaYJpy3bA5YE66ZbLCDT0_ExqPyRBD7NJqXYd2LwuwW7CWAgnuh9dC4psIOeIMr_8QafTkh-BYfBDHJ0wIr0XNg8IZDuKAaD03oVmPKNnfhJZHO2LrYs';
 const setupPlayer = (token:string):Spotify.SpotifyPlayer => { 
     window.onSpotifyWebPlaybackSDKReady = () => {
             player = new Spotify.Player({
@@ -120,6 +119,16 @@ class Zune extends Component<{location: any}, State> {
         const state = await player.getCurrentState(); //force this request to complete
         console.log(state ? state.paused : null);
     } 
+
+    private getLibrary = async () => {
+      const response = await fetch('https://api.spotify.com/v1/me/tracks', { 
+        method: 'get', 
+        headers: new Headers({
+          'Authorization': this.state.token!
+        })
+      });
+      return response;
+    }
 
     private loginButton = () => {
       const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
