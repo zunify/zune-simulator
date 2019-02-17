@@ -140,7 +140,7 @@ class Zune extends Component<{location: any}, State> {
 
     private getLibrary = async () => {
       const response = await fetch('https://api.spotify.com/v1/me/tracks', { 
-        method: 'get', 
+        method: 'GET', 
         headers: new Headers({
           'Authorization': `Bearer ${this.state.token!}`
         })
@@ -150,12 +150,23 @@ class Zune extends Component<{location: any}, State> {
 
     private getPlaylists = async () => {
       const response = await fetch('https://api.spotify.com/v1/me/playlists', { 
-        method: 'get', 
+        method: 'GET', 
         headers: new Headers({
           'Authorization': `Bearer ${this.state.token!}`
         })
       });
-      return response;
+      return await response;
+    }
+
+
+    private getPlaylistIcon = async (playlist_id: string) => {
+      const response = await fetch(`https://api.spotify.com/v1/me/playlists${playlist_id}/images`, { 
+        method: 'GET', 
+        headers: new Headers({
+          'Authorization': `Bearer ${this.state.token!}`
+        })
+      });
+      return await response;
     }
     // private loginButton = () => {
     //   const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
