@@ -6,6 +6,7 @@ import 'antd/dist/antd.css';
 import './Zune.css'
 
 let player:Spotify.SpotifyPlayer;
+
 const token = 'BQBWDtEU4UddAik38pbZFzvb_3tnK767ipt-cPql--vhwSxTTfwoaYJpy3bA5YE66ZbLCDT0_ExqPyRBD7NJqXYd2LwuwW7CWAgnuh9dC4psIOeIMr_8QafTkh-BYfBDHJ0wIr0XNg8IZDuKAaD03oVmPKNnfhJZHO2LrYs';
 const setupPlayer = (token:string):Spotify.SpotifyPlayer => { 
     window.onSpotifyWebPlaybackSDKReady = () => {
