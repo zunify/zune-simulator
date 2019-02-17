@@ -151,15 +151,19 @@ class Zune extends Component<{location: any}, State> {
         if(response.status === 200){
             const currentlyPlaying = await response.json();
             console.log(currentlyPlaying.items[0])
+            const albumResponse = await this.getAlbumTracks(currentlyPlaying.items[0].track.album.id);
             await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.state.deviceId}`, {
                 method: 'PUT',
-                body: JSON.stringify({ uris: [currentlyPlaying.items[0].track.uri] }),
+                body: JSON.stringify({ uris: [albumResponse[0].uri] }),
                 headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${this.state.token!}`
                 },
             })
-            await setTimeout(() => this.togglePlayer(player), 1000)
+            await setTimeout( async () => { const currState = await player.getCurrentState()
+              if (currState)
+                !currState.paused ? this.togglePlayer(player) : null;
+            },520);
         } else {
             console.log('aslkdlaksjdfhlkajshdflkajshdfl')
         }
@@ -168,18 +172,36 @@ class Zune extends Component<{location: any}, State> {
     private nextTrack = (player: Spotify.SpotifyPlayer) => { 
         player.nextTrack();
         console.log('Skipped to next track!');
-      }
+    }
       
     private prevTrack = (player: Spotify.SpotifyPlayer) => { 
         player.previousTrack();
         console.log('Set to previous track!');
-      }
+    }
+
+    private pausePlayback = (player: Spotify.SpotifyPlayer) => { 
+      player.pause();
+      console.log('Pausing track');
+    }
       
     private togglePlayer = (player: Spotify.SpotifyPlayer) => {
         player.togglePlay();
         // const state = await player.getCurrentState(); //force this request to complete
         // console.log(state ? state.paused : null);
     } 
+
+    private getAlbumTracks = async (album_id: String) => {
+      const response = await fetch(`https://api.spotify.com/v1/albums/${album_id}/tracks`, { 
+        method: 'GET', 
+        headers: new Headers({
+          'Authorization': `Bearer ${this.state.token!}`
+        })
+      });
+      const albumTrack = await response.json();
+      console.log("TRACKS")
+      console.log(albumTrack.items)
+      return albumTrack.items;
+    }
 
     private getLibrary = async () => {
         const response = await fetch('https://api.spotify.com/v1/me/tracks?offset=0&limit=50', { 
