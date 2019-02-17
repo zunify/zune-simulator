@@ -88,11 +88,7 @@ class Zune extends Component<{location: any}, State> {
         //Logic that builds the url and returns it
       const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
       const redirect_uri = 'http://localhost:3000/';
-<<<<<<< Updated upstream
-      var scopes = 'streaming user-read-birthdate user-read-email user-read-private user-read-currently-playing user-read-playback-state user-read-recently-played user-modify-playback-state';
-=======
-      var scopes = 'streaming user-read-birthdate user-read-email user-read-private user-read-currently-playing user-read-playback-state playlist-read-private';
->>>>>>> Stashed changes
+      var scopes = 'streaming user-read-birthdate user-read-email user-read-private user-read-currently-playing user-read-playback-state user-read-recently-played user-modify-playback-state playlist-read-private';
       const url = 'https://accounts.spotify.com/authorize' +
       '?response_type=token' +
       '&client_id=' + my_client_id +
@@ -125,12 +121,7 @@ class Zune extends Component<{location: any}, State> {
         } else {
             console.log('aslkdlaksjdfhlkajshdflkajshdfl')
         }
-    
     }
-    private startPlayback = (player: Spotify.SpotifyPlayer) => { 
-        player.connect();
-      }
-      
     private nextTrack = (player: Spotify.SpotifyPlayer) => { 
         player.nextTrack();
         console.log('Skipped to next track!');
