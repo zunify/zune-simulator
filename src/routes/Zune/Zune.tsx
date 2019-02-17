@@ -7,7 +7,6 @@ import './Zune.css'
 
 let player:Spotify.SpotifyPlayer;
 const token = 'BQBWDtEU4UddAik38pbZFzvb_3tnK767ipt-cPql--vhwSxTTfwoaYJpy3bA5YE66ZbLCDT0_ExqPyRBD7NJqXYd2LwuwW7CWAgnuh9dC4psIOeIMr_8QafTkh-BYfBDHJ0wIr0XNg8IZDuKAaD03oVmPKNnfhJZHO2LrYs';
-
 const setupPlayer = (token:string):Spotify.SpotifyPlayer => { 
     window.onSpotifyWebPlaybackSDKReady = () => {
             player = new Spotify.Player({
@@ -99,6 +98,7 @@ class Zune extends Component {
       }
       
     private togglePlayer = async (player: Spotify.SpotifyPlayer) => {
+        // player.
         player.togglePlay();
         const state = await player.getCurrentState(); //force this request to complete
         console.log(state ? state.paused : null);
@@ -107,9 +107,9 @@ class Zune extends Component {
     private loginButton = () => {
       const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
       const redirect_uri = 'http://localhost:3000/';
-      var scopes = 'user-read-private user-read-email';
+      var scopes = 'streaming user-read-birthdate user-read-email user-read-private';
       const url = 'https://accounts.spotify.com/authorize' +
-      '?response_type=code' +
+      '?response_type=token' +
       '&client_id=' + my_client_id +
       (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
       '&redirect_uri=' + encodeURIComponent(redirect_uri);
