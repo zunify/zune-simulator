@@ -82,7 +82,7 @@ class Zune extends Component<{location: any}, State> {
                             <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
                                 <button type='button' onClick={()=>{this.prevTrack(player)}} className='directonal'>.</button>
                                 <button style={{}} type='button' onClick={()=>{this.setState({menu: selected});console.log(`Selected option ${selected} with value ${options[selected-1].label}, ${options[selected-1].options}`)}} className='directonal'>.</button>
-                                <button type='button' onClick={()=>{this.prevTrack(player)}} className='directonal'>.</button>
+                                <button type='button' onClick={()=>{this.nextTrack(player)}} className='directonal'>.</button>
                             </div>
                             <button type='button' onClick={()=>{this.setState({selected: Math.min(this.state.selected+1, seletedOptions.length)})}} className='directonal'>.</button>
                         </div>
@@ -154,7 +154,7 @@ class Zune extends Component<{location: any}, State> {
             const albumResponse = await this.getAlbumTracks(currentlyPlaying.items[0].track.album.id);
             await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.state.deviceId}`, {
                 method: 'PUT',
-                body: JSON.stringify({ uris: [albumResponse[0].uri] }),
+                body: JSON.stringify({ uris: albumResponse.map((el:any) => el.uri) }),
                 headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${this.state.token!}`
