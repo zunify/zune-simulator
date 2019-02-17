@@ -10,7 +10,6 @@
 
 .border {
     flex: 2;
-    display: block;
     padding: 1rem;
     background-color: #382525;
     border-radius: 0.5rem;
@@ -24,16 +23,18 @@
 }
 
 .controls {
-    flex: 1;
     align-items: center;
-    height: 100%;
     margin: auto;
     display: flex;
     flex-direction: row;
+    color: #9c9490;
 }
 
 .control {
     border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 50px;
     height: 50px;
     margin: 0.6rem;
