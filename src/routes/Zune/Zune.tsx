@@ -9,11 +9,13 @@ let player:Spotify.SpotifyPlayer;
 
 type State = {
     token: string | null;
+    deviceId: string | null;
 }
 
 class Zune extends Component<{location: any}, State> {
     state = {
-        token: null
+        token: null,
+        deviceId: null
     }
     componentWillMount() {
         //Check for code in url
@@ -66,19 +68,9 @@ class Zune extends Component<{location: any}, State> {
   
           // Ready
           player.addListener('ready', ({ device_id }) => {
+            this.setState({deviceId: device_id})
             console.log('Ready with Device ID', device_id);
-            const play = (id: string) => {
-              console.log(id);
-                fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
-                  method: 'PUT',
-                  body: JSON.stringify({ uris: ['spotify:track:0tZkVZ9DeAa0MNK2gY5NtV'] }),
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.state.token!}`
-                  },
-                });
-            }
-            play(device_id);
+            this.play()
           });
   
           // Not Ready
@@ -90,20 +82,41 @@ class Zune extends Component<{location: any}, State> {
           player.connect(); 
       };
       return player;
-  }
+    }
 
     private authUrl = () => {
         //Logic that builds the url and returns it
       const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
       const redirect_uri = 'http://localhost:3000/';
-      var scopes = 'streaming user-read-birthdate user-read-email user-read-private';
+      var scopes = 'streaming user-read-birthdate user-read-email user-read-private user-read-currently-playing user-read-playback-state';
       const url = 'https://accounts.spotify.com/authorize' +
       '?response_type=token' +
       '&client_id=' + my_client_id +
       (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
       '&redirect_uri=' + encodeURIComponent(redirect_uri);
       return url
-  
+
+    }
+
+    public play = async () => {
+      const currentlyPlaying = await fetch(`https://api.spotify.com/v1/me/player`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.state.token}`
+        },
+      })
+      console.log(await currentlyPlaying)
+      // fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.state.deviceId}`, {
+      //   method: 'PUT',
+      //   body: JSON.stringify({ uris: ['spotify:track:0tZkVZ9DeAa0MNK2gY5NtV'] }),
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${this.state.token!}`
+      //   },
+      // }).then(() => {
+      //   setTimeout(()=>this.togglePlayer(player), 200)
+      // });
     }
 
     private startPlayback = (player: Spotify.SpotifyPlayer) => { 
@@ -121,25 +134,10 @@ class Zune extends Component<{location: any}, State> {
       }
       
     private togglePlayer = async (player: Spotify.SpotifyPlayer) => {
-        // player.
-        let device_id = await fetch('https://api.spotify.com/v1/me', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${this.state.token}`
-          },
-          }).then(function(res){ return res.json(); })
-          .then(function(data){ return JSON.stringify( data )  })
-          console.log(device_id);
-          // this.play(device_id.)
- 
-        
-        // player.togglePlay();
-        // const state = await player.getCurrentState(); //force this request to complete
-        // console.log(state ? state.paused : null);
+        player.togglePlay();
+        const state = await player.getCurrentState(); //force this request to complete
+        console.log(state ? state.paused : null);
     } 
-
-    
-    
 
     private getLibrary = async () => {
       const response = await fetch('https://api.spotify.com/v1/me/tracks', { 
@@ -151,22 +149,22 @@ class Zune extends Component<{location: any}, State> {
       return response;
     }
 
-    private loginButton = () => {
-      const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
-      const redirect_uri = 'http://localhost:3000/';
-      var scopes = 'streaming user-read-birthdate user-read-email user-read-private';
-      const url = 'https://accounts.spotify.com/authorize' +
-      '?response_type=token' +
-      '&client_id=' + my_client_id +
-      (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
-      '&redirect_uri=' + encodeURIComponent(redirect_uri);
-      console.log('asd')
-      return (
-        <a type='button' href={url}>
-          LOGIN
-        </a>
-      )
-    }
+    // private loginButton = () => {
+    //   const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
+    //   const redirect_uri = 'http://localhost:3000/';
+    //   var scopes = 'streaming user-read-birthdate user-read-email user-read-private';
+    //   const url = 'https://accounts.spotify.com/authorize' +
+    //   '?response_type=token' +
+    //   '&client_id=' + my_client_id +
+    //   (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+    //   '&redirect_uri=' + encodeURIComponent(redirect_uri);
+    //   console.log('asd')
+    //   return (
+    //     <a type='button' href={url}>
+    //       LOGIN
+    //     </a>
+    //   )
+    // }
 }
 
 export default Zune;
