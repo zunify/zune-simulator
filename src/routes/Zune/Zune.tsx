@@ -13,6 +13,8 @@ type State = {
     token: string | null;
     deviceId: string | null;
     selected: number;
+    library: any[];
+    menu: number | null;
 }
 
 class Zune extends Component<{location: any}, State> {
@@ -20,18 +22,24 @@ class Zune extends Component<{location: any}, State> {
         token: null,
         deviceId: null,
         selected: 1,
+        menu: null,
+        library: [],
     }
-    componentWillMount() {
+    async componentWillMount() {
         //Check for code in url
-        this.setState({token: this.props.location.hash ? this.props.location.hash.split('=')[1]:null})
+        await this.setState({token: this.props.location.hash ? this.props.location.hash.split('=')[1]:null})
         console.log(this.props.location)
         if(this.props.location.hash.split('=')[1]){
-            this.setupPlayer(this.props.location.hash.split('=')[1]);
+            await this.setupPlayer(this.props.location.hash.split('=')[1]);
+            const library = await this.getLibrary()
+            this.setState({library: library.map((el:any, i:number) => {
+                return {...el, index: i, label: el.track.name}
+            })})
         }
     }
 
     render() {
-        const {selected} = this.state;
+        const {menu, selected} = this.state;
         const loginScreen = (
             <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                 <img height='200' src='./zune.svg' />
@@ -42,33 +50,41 @@ class Zune extends Component<{location: any}, State> {
         const options = [
             {
                 label: 'music',
-                id: 1
+                id: 1,
+                options: this.state.library
             },
             {
                 label: 'playlists',
                 id: 2
             }
         ]
+
+        const seletedOptions = () => {
+            if (menu === 1){
+                return options[0].options
+            }
+            return options
+        }
         return (
             <div className='background'>
                 <div className="Zune">
                     <div className='border'>
                         <div className='screen'>
                             {!this.state.token && loginScreen}
-                            {this.state.token && <Home options={options} selected={this.state.selected}/>}
+                            {this.state.token && <Home options={seletedOptions()!} selected={this.state.selected}/>}
 
                         </div>
                     </div>
-                    <div className='controls'>
+                    <div style={{marginBottom: '1rem'}} className='controls'>
                         <div className='control back'><i className="fas fa-arrow-left"></i></div>
                         <div style={{flexDirection: 'column'}} className='control wheel'>
                             <button type='button' onClick={()=>{this.setState({selected: Math.max(this.state.selected-1, 1)})}} className='directonal'>.</button>
                             <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
                                 <button type='button' onClick={()=>{this.prevTrack(player)}} className='directonal'>.</button>
-                                <button style={{}} type='button' onClick={()=>{console.log(`Selected option ${selected} with value ${options[selected-1].label}`)}} className='directonal'>.</button>
+                                <button style={{}} type='button' onClick={()=>{this.setState({menu: selected});console.log(`Selected option ${selected} with value ${options[selected-1].label}, ${options[selected-1].options}`)}} className='directonal'>.</button>
                                 <button type='button' onClick={()=>{this.prevTrack(player)}} className='directonal'>.</button>
                             </div>
-                            <button type='button' onClick={()=>{this.setState({selected: Math.min(this.state.selected+1, options.length)})}} className='directonal'>.</button>
+                            <button type='button' onClick={()=>{this.setState({selected: Math.min(this.state.selected+1, seletedOptions.length)})}} className='directonal'>.</button>
                         </div>
                         <button type='button' onClick={()=>{this.togglePlayer(player)}} className='control toggle'><i className="fas fa-play"></i></button>
                     </div>
@@ -115,7 +131,7 @@ class Zune extends Component<{location: any}, State> {
         //Logic that builds the url and returns it
       const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
       const redirect_uri = 'http://localhost:3000/';
-      var scopes = 'streaming user-read-birthdate user-read-email user-read-private user-read-currently-playing user-read-playback-state user-read-recently-played user-modify-playback-state playlist-read-private';
+      var scopes = 'streaming user-read-birthdate user-read-email user-read-private user-read-currently-playing user-read-playback-state user-read-recently-played user-modify-playback-state playlist-read-private user-library-read';
       const url = 'https://accounts.spotify.com/authorize' +
       '?response_type=token' +
       '&client_id=' + my_client_id +
@@ -138,7 +154,7 @@ class Zune extends Component<{location: any}, State> {
             console.log(currentlyPlaying.items[0])
             await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.state.deviceId}`, {
                 method: 'PUT',
-                body: JSON.stringify({ uris: [currentlyPlaying.items[0].track.album.uri] }),
+                body: JSON.stringify({ uris: [currentlyPlaying.items[0].track.uri] }),
                 headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${this.state.token!}`
@@ -166,13 +182,15 @@ class Zune extends Component<{location: any}, State> {
     } 
 
     private getLibrary = async () => {
-      const response = await fetch('https://api.spotify.com/v1/me/tracks', { 
-        method: 'GET', 
-        headers: new Headers({
-          'Authorization': `Bearer ${this.state.token!}`
-        })
-      });
-      return response;
+        const response = await fetch('https://api.spotify.com/v1/me/tracks?offset=0&limit=50', { 
+            method: 'GET', 
+            headers: new Headers({
+                'Authorization': `Bearer ${this.state.token!}`
+            })
+        });
+        const songs = await response.json()
+        console.log(songs.items)
+        return songs.items;
     }
 
     private getPlaylists = async () => {
