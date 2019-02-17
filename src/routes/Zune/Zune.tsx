@@ -84,7 +84,7 @@ class Zune extends Component<{location: any}, State> {
                                 <button style={{}} type='button' onClick={()=>{this.setState({menu: selected});console.log(`Selected option ${selected} with value ${options[selected-1].label}, ${options[selected-1].options}`)}} className='directonal'>.</button>
                                 <button type='button' onClick={()=>{this.nextTrack(player)}} className='directonal'>.</button>
                             </div>
-                            <button type='button' onClick={()=>{this.setState({selected: Math.min(this.state.selected+1, seletedOptions.length)})}} className='directonal'>.</button>
+                            <button type='button' onClick={()=>{this.setState({selected: Math.min(this.state.selected+1, seletedOptions()!.length)})}} className='directonal'>.</button>
                         </div>
                         <button type='button' onClick={()=>{this.togglePlayer(player)}} className='control toggle'><i className="fas fa-play"></i></button>
                     </div>
