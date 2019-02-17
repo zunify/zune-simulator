@@ -12,7 +12,6 @@
 }
 
 .Zune {
-    height: calc(100VH - 1rem);
     max-height: 600px;
     max-width: 330px;
     display: flex;
