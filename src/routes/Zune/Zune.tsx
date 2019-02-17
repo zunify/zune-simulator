@@ -130,7 +130,7 @@ class Zune extends Component<{location: any}, State> {
     private authUrl = () => {
         //Logic that builds the url and returns it
       const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
-      const redirect_uri = 'http://localhost:3000/';
+      const redirect_uri = location.origin;
       var scopes = 'streaming user-read-birthdate user-read-email user-read-private user-read-currently-playing user-read-playback-state user-read-recently-played user-modify-playback-state playlist-read-private user-library-read';
       const url = 'https://accounts.spotify.com/authorize' +
       '?response_type=token' +
