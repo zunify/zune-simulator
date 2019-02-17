@@ -99,14 +99,15 @@ class Zune extends Component<{location: any}, State> {
     }
 
     public play = async () => {
-      const currentlyPlaying = await fetch(`https://api.spotify.com/v1/me/player`, {
+      let currentlyPlaying = await (await fetch(`https://api.spotify.com/v1/me/player`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.state.token}`
         },
-      })
-      console.log(await currentlyPlaying)
+      })).json()
+
+      console.log(currentlyPlaying.item.uri)
       // fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.state.deviceId}`, {
       //   method: 'PUT',
       //   body: JSON.stringify({ uris: ['spotify:track:0tZkVZ9DeAa0MNK2gY5NtV'] }),
