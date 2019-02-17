@@ -39,10 +39,21 @@ const setupPlayer = (token:string):Spotify.SpotifyPlayer => {
     return player;
 }
 
-class Zune extends Component {
+type State = {
+    token: string | null;
+}
 
-    componentDidMount() {
-        setupPlayer(token)
+class Zune extends Component<{location: any}, State> {
+    state = {
+        token: null
+    }
+    componentWillMount() {
+        //Check for code in url
+        console.log(this.props.location.search.split('=')[1])
+        this.setState({token: this.props.location.search ? this.props.location.search.split('=')[1]:null})
+        if(this.props.location.search.split('=')[1]){
+            setupPlayer(this.props.location.search.split('=')[1]);
+        }
     }
 
     render() {
@@ -50,13 +61,12 @@ class Zune extends Component {
 
         }
         return (
-          
             <div className="Zune">
                 <div className='border'>
                     <div className='screen'>
-                        <div style={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                        <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                             <img height='200' src='./zune.svg' />
-                            <Button type='primary' href={this.authUrl()} >Login</Button>
+                            <Button style={{marginTop: '1rem'}} type='primary' href={this.authUrl()} >Login</Button>
                         </div>
                     </div>
                 </div>
@@ -75,7 +85,7 @@ class Zune extends Component {
       const redirect_uri = 'http://localhost:3000/';
       var scopes = 'user-read-private user-read-email';
       const url = 'https://accounts.spotify.com/authorize' +
-      '?response_type=code' +
+      '?response_type=token' +
       '&client_id=' + my_client_id +
       (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
       '&redirect_uri=' + encodeURIComponent(redirect_uri);
