@@ -1,15 +1,15 @@
 {
-  "main.css": "/zune-simulator/static/css/main.b9950ed4.chunk.css",
-  "main.js": "/zune-simulator/static/js/main.48a3547e.chunk.js",
-  "main.js.map": "/zune-simulator/static/js/main.48a3547e.chunk.js.map",
+  "main.css": "/zune-simulator/static/css/main.fea992e0.chunk.css",
+  "main.js": "/zune-simulator/static/js/main.2179f1f7.chunk.js",
+  "main.js.map": "/zune-simulator/static/js/main.2179f1f7.chunk.js.map",
   "runtime~main.js": "/zune-simulator/static/js/runtime~main.0d4b4596.js",
   "runtime~main.js.map": "/zune-simulator/static/js/runtime~main.0d4b4596.js.map",
   "static/css/2.370cb552.chunk.css": "/zune-simulator/static/css/2.370cb552.chunk.css",
   "static/js/2.d7805980.chunk.js": "/zune-simulator/static/js/2.d7805980.chunk.js",
   "static/js/2.d7805980.chunk.js.map": "/zune-simulator/static/js/2.d7805980.chunk.js.map",
   "index.html": "/zune-simulator/index.html",
-  "precache-manifest.630d9bbc51169b3e4b1af245d069804b.js": "/zune-simulator/precache-manifest.630d9bbc51169b3e4b1af245d069804b.js",
+  "precache-manifest.edc9408e4a79ed9e56a177aa3aea94db.js": "/zune-simulator/precache-manifest.edc9408e4a79ed9e56a177aa3aea94db.js",
   "service-worker.js": "/zune-simulator/service-worker.js",
   "static/css/2.370cb552.chunk.css.map": "/zune-simulator/static/css/2.370cb552.chunk.css.map",
-  "static/css/main.b9950ed4.chunk.css.map": "/zune-simulator/static/css/main.b9950ed4.chunk.css.map"
+  "static/css/main.fea992e0.chunk.css.map": "/zune-simulator/static/css/main.fea992e0.chunk.css.map"
 }

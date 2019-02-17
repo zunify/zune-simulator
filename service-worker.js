@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/zune-simulator/precache-manifest.630d9bbc51169b3e4b1af245d069804b.js"
+  "/zune-simulator/precache-manifest.edc9408e4a79ed9e56a177aa3aea94db.js"
 );
 
 workbox.clientsClaim();
