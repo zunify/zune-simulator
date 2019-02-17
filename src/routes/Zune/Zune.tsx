@@ -11,7 +11,7 @@ const token = 'BQBWDtEU4UddAik38pbZFzvb_3tnK767ipt-cPql--vhwSxTTfwoaYJpy3bA5YE66
 const setupPlayer = (token:string):Spotify.SpotifyPlayer => { 
     window.onSpotifyWebPlaybackSDKReady = () => {
             player = new Spotify.Player({
-            name: 'Web Playback SDK Quick Start Player',
+            name: 'Get in the Zune',
             getOAuthToken: cb => { cb(token); }
         });
 
