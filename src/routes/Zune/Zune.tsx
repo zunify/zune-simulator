@@ -7,42 +7,6 @@ import './Zune.css'
 
 let player:Spotify.SpotifyPlayer;
 
-const setupPlayer = (token:string):Spotify.SpotifyPlayer => { 
-    window.onSpotifyWebPlaybackSDKReady = () => {
-            player = new Spotify.Player({
-            name: 'Get in the Zune',
-            getOAuthToken: cb => { cb(token); }
-        });
-
-        // Error handling
-        player.addListener('initialization_error', ({ message }) => { console.error(message); });
-        player.addListener('authentication_error', ({ message }) => { console.error(message); });
-        player.addListener('account_error', ({ message }) => { console.error(message); });
-        player.addListener('playback_error', ({ message }) => { console.error(message); });
-
-        // Playback status updates
-        player.addListener('player_state_changed', state => { console.log(state); });
-
-        // Ready
-        player.addListener('ready', ({ device_id }) => {
-        console.log('Ready with Device ID', device_id);
-        });
-
-        // Not Ready
-        player.addListener('not_ready', ({ device_id }) => {
-        console.log('Device ID has gone offline', device_id);
-        });
-
-        // Connect to the player!
-        player.connect().then(success => {
-            if (success) {
-              console.log('The Web Playback SDK successfully connected to Spotify!');
-            }
-          })
-    };
-    return player;
-}
-
 type State = {
     token: string | null;
 }
@@ -56,13 +20,12 @@ class Zune extends Component<{location: any}, State> {
         this.setState({token: this.props.location.hash ? this.props.location.hash.split('=')[1]:null})
         console.log(this.props.location)
         if(this.props.location.hash.split('=')[1]){
-            setupPlayer(this.props.location.hash.split('=')[1]);
+            this.setupPlayer(this.props.location.hash.split('=')[1]);
         }
     }
 
     render() {
         const loginButton = () => {
-
         }
         return (
             <div className='background'>
@@ -71,7 +34,7 @@ class Zune extends Component<{location: any}, State> {
                         <div className='screen'>
                             <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                                 <img height='200' src='./zune.svg' />
-                                <Button style={{backgroundColor: '#1ed760', marginTop: '1rem'}} color='green' href={this.authUrl()} >Authorize<i style={{marginLeft: '0.5rem'}} className="fab fa-spotify"></i></Button>
+                                <Button style={{marginTop: '1rem'}} type='primary' href={this.authUrl()} >Login</Button>
                             </div>
                         </div>
                     </div>
@@ -84,6 +47,50 @@ class Zune extends Component<{location: any}, State> {
             </div>
         );
     }
+
+    private setupPlayer = (token:string):Spotify.SpotifyPlayer => { 
+      window.onSpotifyWebPlaybackSDKReady = () => {
+              player = new Spotify.Player({
+              name: 'Get in the Zune',
+              getOAuthToken: cb => { cb(token); }
+          });
+  
+          // Error handling
+          player.addListener('initialization_error', ({ message }) => { console.error(message); });
+          player.addListener('authentication_error', ({ message }) => { console.error(message); });
+          player.addListener('account_error', ({ message }) => { console.error(message); });
+          player.addListener('playback_error', ({ message }) => { console.error(message); });
+  
+          // Playback status updates
+          player.addListener('player_state_changed', state => { console.log(state); });
+  
+          // Ready
+          player.addListener('ready', ({ device_id }) => {
+            console.log('Ready with Device ID', device_id);
+            const play = (id: string) => {
+              console.log(id);
+                fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
+                  method: 'PUT',
+                  body: JSON.stringify({ uris: ['spotify:track:0tZkVZ9DeAa0MNK2gY5NtV'] }),
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.state.token!}`
+                  },
+                });
+            }
+            play(device_id);
+          });
+  
+          // Not Ready
+          player.addListener('not_ready', ({ device_id }) => {
+          console.log('Device ID has gone offline', device_id);
+          });
+  
+          // Connect to the player!
+          player.connect(); 
+      };
+      return player;
+  }
 
     private authUrl = () => {
         //Logic that builds the url and returns it
@@ -115,16 +122,30 @@ class Zune extends Component<{location: any}, State> {
       
     private togglePlayer = async (player: Spotify.SpotifyPlayer) => {
         // player.
-        player.togglePlay();
-        const state = await player.getCurrentState(); //force this request to complete
-        console.log(state ? state.paused : null);
+        let device_id = await fetch('https://api.spotify.com/v1/me', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${this.state.token}`
+          },
+          }).then(function(res){ return res.json(); })
+          .then(function(data){ return JSON.stringify( data )  })
+          console.log(device_id);
+          // this.play(device_id.)
+ 
+        
+        // player.togglePlay();
+        // const state = await player.getCurrentState(); //force this request to complete
+        // console.log(state ? state.paused : null);
     } 
+
+    
+    
 
     private getLibrary = async () => {
       const response = await fetch('https://api.spotify.com/v1/me/tracks', { 
         method: 'get', 
         headers: new Headers({
-          'Authorization': this.state.token!
+          'Authorization': `Bearer ${this.state.token!}`
         })
       });
       return response;
