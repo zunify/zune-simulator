@@ -76,7 +76,7 @@ class Zune extends Component<{location: any}, State> {
                         </div>
                     </div>
                     <div style={{marginBottom: '1rem'}} className='controls'>
-                        <div className='control back'><i className="fas fa-arrow-left"></i></div>
+                        <button type='button' onClick={()=>{this.setState({menu: null, selected: 1})}} className='control back'><i className="fas fa-arrow-left"></i></button>
                         <div style={{flexDirection: 'column'}} className='control wheel'>
                             <button type='button' onClick={()=>{this.setState({selected: Math.max(this.state.selected-1, 1)})}} className='directonal'>.</button>
                             <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
