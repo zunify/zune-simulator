@@ -40,18 +40,6 @@ const setupPlayer = (token:string):Spotify.SpotifyPlayer => {
     return player;
 }
 
-
-const triggerLogin = () => {
-  app.get('/login', function(req, res) {
-    var scopes = 'user-read-private user-read-email';
-    res.redirect('https://accounts.spotify.com/authorize' +
-      '?response_type=code' +
-      '&client_id=' + my_client_id +
-      (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
-      '&redirect_uri=' + encodeURIComponent(redirect_uri));
-    });
-}
-
 class Zune extends Component {
 
     componentDidMount() {
@@ -63,7 +51,16 @@ class Zune extends Component {
 
         }
         return (
+<<<<<<< HEAD
             <div className="Zune">    
+=======
+          
+            <div className="Zune">
+                <button type='button' onClick={()=>{this.startPlayback(player)}}>START</button>
+                <button type='button' onClick={()=>{this.togglePlayer(player)}}>PLAY/PAUSE</button>
+                <button type='button' onClick={()=>{this.nextTrack(player)}}>NEXT</button>
+                <button type='button' onClick={()=>{this.prevTrack(player)}}>PREVIOUS</button>      
+>>>>>>> merge conflicts
                 <div className='border'>
                     <div className='screen'>
                         <div style={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -105,6 +102,23 @@ class Zune extends Component {
         const state = await player.getCurrentState(); //force this request to complete
         console.log(state ? state.paused : null);
     } 
+
+    private loginButton = () => {
+      const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
+      const redirect_uri = 'http://localhost:3000/?';
+      var scopes = 'user-read-private user-read-email';
+      const url = 'https://accounts.spotify.com/authorize' +
+      '?response_type=code' +
+      '&client_id=' + my_client_id +
+      (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+      '&redirect_uri=' + encodeURIComponent(redirect_uri);
+      console.log('asd')
+      return (
+        <a type='button' href={url}>
+          LOGIN
+        </a>
+      )
+    }
 }
 
 export default Zune;
