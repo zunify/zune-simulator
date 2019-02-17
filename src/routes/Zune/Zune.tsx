@@ -108,16 +108,16 @@ class Zune extends Component<{location: any}, State> {
         })
         if(response.status === 200){
             const currentlyPlaying = await response.json();
-            console.log(currentlyPlaying.item.uri)
+            console.log(currentlyPlaying.items[0].track.uri)
             await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.state.deviceId}`, {
                 method: 'PUT',
-                body: JSON.stringify({ uris: [currentlyPlaying.item.uri] }),
+                body: JSON.stringify({ uris: [currentlyPlaying.items[0].track.uri] }),
                 headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${this.state.token!}`
                 },
             })
-            await this.togglePlayer(player)
+            await setTimeout(() => this.togglePlayer(player), 1000)
         } else {
             console.log('aslkdlaksjdfhlkajshdflkajshdfl')
         }
@@ -137,10 +137,10 @@ class Zune extends Component<{location: any}, State> {
         console.log('Set to previous track!');
       }
       
-    private togglePlayer = async (player: Spotify.SpotifyPlayer) => {
+    private togglePlayer = (player: Spotify.SpotifyPlayer) => {
         player.togglePlay();
-        const state = await player.getCurrentState(); //force this request to complete
-        console.log(state ? state.paused : null);
+        // const state = await player.getCurrentState(); //force this request to complete
+        // console.log(state ? state.paused : null);
     } 
 
     private getLibrary = async () => {
