@@ -51,9 +51,10 @@ class Zune extends Component<{location: any}, State> {
     componentWillMount() {
         //Check for code in url
         console.log(this.props.location.search.split('=')[1])
-        this.setState({token: this.props.location.search ? this.props.location.search.split('=')[1]:null})
-        if(this.props.location.search.split('=')[1]){
-            setupPlayer(this.props.location.search.split('=')[1]);
+        this.setState({token: this.props.location.hash ? this.props.location.hash.split('=')[1]:null})
+        console.log(this.props.location)
+        if(this.props.location.hash.split('=')[1]){
+            setupPlayer(this.props.location.hash.split('=')[1]);
         }
     }
 
@@ -84,7 +85,7 @@ class Zune extends Component<{location: any}, State> {
         //Logic that builds the url and returns it
       const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
       const redirect_uri = 'http://localhost:3000/';
-      var scopes = 'user-read-private user-read-email';
+      var scopes = 'streaming user-read-birthdate user-read-email user-read-private';
       const url = 'https://accounts.spotify.com/authorize' +
       '?response_type=token' +
       '&client_id=' + my_client_id +
