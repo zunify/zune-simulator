@@ -2,20 +2,24 @@ import React, { Component } from 'react';
 
 import { Button } from 'antd';
 
+import {Home} from './components';
 import 'antd/dist/antd.css';
 import './Zune.css'
+import Column from 'antd/lib/table/Column';
 
 let player:Spotify.SpotifyPlayer;
 
 type State = {
     token: string | null;
     deviceId: string | null;
+    selected: number;
 }
 
 class Zune extends Component<{location: any}, State> {
     state = {
         token: null,
-        deviceId: null
+        deviceId: null,
+        selected: 1,
     }
     componentWillMount() {
         //Check for code in url
@@ -27,22 +31,45 @@ class Zune extends Component<{location: any}, State> {
     }
 
     render() {
-        const loginButton = () => {
-        }
+        const {selected} = this.state;
+        const loginScreen = (
+            <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                <img height='200' src='./zune.svg' />
+                <Button style={{marginTop: '1rem'}} type='primary' href={this.authUrl()} >Login</Button>
+            </div>
+        ) 
+
+        const options = [
+            {
+                label: 'music',
+                id: 1
+            },
+            {
+                label: 'playlists',
+                id: 2
+            }
+        ]
         return (
             <div className='background'>
                 <div className="Zune">
                     <div className='border'>
                         <div className='screen'>
-                            <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                                <img height='200' src='./zune.svg' />
-                                <Button style={{marginTop: '1rem'}} type='primary' href={this.authUrl()} >Login</Button>
-                            </div>
+                            {!this.state.token && loginScreen}
+                            {this.state.token && <Home options={options} selected={this.state.selected}/>}
+
                         </div>
                     </div>
                     <div className='controls'>
                         <div className='control back'><i className="fas fa-arrow-left"></i></div>
-                        <div className='control wheel'></div>
+                        <div style={{flexDirection: 'column'}} className='control wheel'>
+                            <button type='button' onClick={()=>{this.setState({selected: Math.max(this.state.selected-1, 1)})}} className='directonal'>.</button>
+                            <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                                <button type='button' onClick={()=>{this.prevTrack(player)}} className='directonal'>.</button>
+                                <button style={{}} type='button' onClick={()=>{console.log(`Selected option ${selected} with value ${options[selected-1].label}`)}} className='directonal'>.</button>
+                                <button type='button' onClick={()=>{this.prevTrack(player)}} className='directonal'>.</button>
+                            </div>
+                            <button type='button' onClick={()=>{this.setState({selected: Math.min(this.state.selected+1, options.length)})}} className='directonal'>.</button>
+                        </div>
                         <button type='button' onClick={()=>{this.togglePlayer(player)}} className='control toggle'><i className="fas fa-play"></i></button>
                     </div>
                 </div>
@@ -108,10 +135,10 @@ class Zune extends Component<{location: any}, State> {
         })
         if(response.status === 200){
             const currentlyPlaying = await response.json();
-            console.log(currentlyPlaying.items[0].track.uri)
+            console.log(currentlyPlaying.items[0])
             await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.state.deviceId}`, {
                 method: 'PUT',
-                body: JSON.stringify({ uris: [currentlyPlaying.items[0].track.uri] }),
+                body: JSON.stringify({ uris: [currentlyPlaying.items[0].track.album.uri] }),
                 headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${this.state.token!}`
