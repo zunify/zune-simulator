@@ -6,7 +6,7 @@ import 'antd/dist/antd.css';
 import './Zune.css'
 
 let player:Spotify.SpotifyPlayer;
-const token = 'BQAnRNM0LPlLGHnlhSvk9FWc1gS1qRILDLJG0XsJ1BJTA_v7Wt5LHZ8Shm5vPkj2RUN4g7JtSlEsAx8PChM6G6-ciCVrWJU5_l0EypblmaGs4WUGKq2ByRpp7dyNAu2c5qYZlglgbxCjKIi0R2baT7z5_gB4t58VpNOoOyA';
+const token = 'BQBWDtEU4UddAik38pbZFzvb_3tnK767ipt-cPql--vhwSxTTfwoaYJpy3bA5YE66ZbLCDT0_ExqPyRBD7NJqXYd2LwuwW7CWAgnuh9dC4psIOeIMr_8QafTkh-BYfBDHJ0wIr0XNg8IZDuKAaD03oVmPKNnfhJZHO2LrYs';
 
 const setupPlayer = (token:string):Spotify.SpotifyPlayer => { 
     window.onSpotifyWebPlaybackSDKReady = () => {
@@ -43,38 +43,38 @@ const setupPlayer = (token:string):Spotify.SpotifyPlayer => {
 class Zune extends Component {
 
     componentDidMount() {
-        //setupPlayer(token)
+        setupPlayer(token)
     }
 
     render() {
+        const loginButton = () => {
+
+        }
         return (
-            <div className="Zune">
-                <button type='button' onClick={()=>{this.startPlayback(player)}}>START</button>
-                <button type='button' onClick={()=>{this.togglePlayer(player)}}>PLAY/PAUSE</button>
-                <button type='button' onClick={()=>{this.nextTrack(player)}}>NEXT</button>
-                <button type='button' onClick={()=>{this.prevTrack(player)}}>PREVIOUS</button>      
+            <div className="Zune">    
                 <div className='border'>
                     <div className='screen'>
                         <div style={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                             <img height='200' src='./zune.svg' />
+                            <Button type='primary' href={this.authUrl()} >Login</Button>
                         </div>
                     </div>
                 </div>
-                <Button onClick={()=>{console.log('asd')}} type="primary">Primary</Button>
-
                 <div className='controls'>
                     <div className='control back'><i className="fas fa-arrow-left"></i></div>
                     <div className='control wheel'></div>
-
-                    <button type='button' onClick={()=>{console.log('asd')}} className='control toggle'><i className="fas fa-play"></i></button>
+                    <button type='button' onClick={()=>{console.log('asd'); this.togglePlayer(player)}} className='control toggle'><i className="fas fa-play"></i></button>
                 </div>
-                {player && <script src="https://sdk.scdn.co/spotify-player.js"></script>}
             </div>
         );
     }
 
+    private authUrl = () => {
+        //Logic that builds the url and returns it
+        return 'http://google.com'
+    }
+
     private startPlayback = (player: Spotify.SpotifyPlayer) => { 
-        console.log('asd')
         player.connect();
       }
       
