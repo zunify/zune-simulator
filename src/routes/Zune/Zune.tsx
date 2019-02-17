@@ -138,7 +138,6 @@ class Zune extends Component<{location: any}, State> {
       (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
       '&redirect_uri=' + encodeURIComponent(redirect_uri);
       return url
-
     }
 
     public initPlay = async () => {
@@ -165,6 +164,7 @@ class Zune extends Component<{location: any}, State> {
             console.log('aslkdlaksjdfhlkajshdflkajshdfl')
         }
     }
+
     private nextTrack = (player: Spotify.SpotifyPlayer) => { 
         player.nextTrack();
         console.log('Skipped to next track!');
@@ -202,7 +202,6 @@ class Zune extends Component<{location: any}, State> {
       });
       return await response;
     }
-
 
     private getPlaylistIcon = async (playlist_id: string) => {
       const response = await fetch(`https://api.spotify.com/v1/me/playlists${playlist_id}/images`, { 
