@@ -70,7 +70,7 @@ class Zune extends Component<{location: any}, State> {
           player.addListener('ready', ({ device_id }) => {
             this.setState({deviceId: device_id})
             console.log('Ready with Device ID', device_id);
-            this.play()
+            this.initPlay()
           });
   
           // Not Ready
@@ -88,7 +88,7 @@ class Zune extends Component<{location: any}, State> {
         //Logic that builds the url and returns it
       const my_client_id = 'fae22fc460a642acab61b10f6cc1cb77';
       const redirect_uri = 'http://localhost:3000/';
-      var scopes = 'streaming user-read-birthdate user-read-email user-read-private user-read-currently-playing user-read-playback-state';
+      var scopes = 'streaming user-read-birthdate user-read-email user-read-private user-read-currently-playing user-read-playback-state user-read-recently-played user-modify-playback-state';
       const url = 'https://accounts.spotify.com/authorize' +
       '?response_type=token' +
       '&client_id=' + my_client_id +
@@ -98,28 +98,31 @@ class Zune extends Component<{location: any}, State> {
 
     }
 
-    public play = async () => {
-      let currentlyPlaying = await (await fetch(`https://api.spotify.com/v1/me/player`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.state.token}`
-        },
-      })).json()
-
-      console.log(currentlyPlaying.item.uri)
-      // fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.state.deviceId}`, {
-      //   method: 'PUT',
-      //   body: JSON.stringify({ uris: ['spotify:track:0tZkVZ9DeAa0MNK2gY5NtV'] }),
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${this.state.token!}`
-      //   },
-      // }).then(() => {
-      //   setTimeout(()=>this.togglePlayer(player), 200)
-      // });
+    public initPlay = async () => {
+        const response = await fetch(`https://api.spotify.com/v1/me/player/recently-played`, {
+            method: 'GET',
+            headers: {
+               'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.state.token}`
+            },
+        })
+        if(response.status === 200){
+            const currentlyPlaying = await response.json();
+            console.log(currentlyPlaying.item.uri)
+            await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.state.deviceId}`, {
+                method: 'PUT',
+                body: JSON.stringify({ uris: [currentlyPlaying.item.uri] }),
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.state.token!}`
+                },
+            })
+            await this.togglePlayer(player)
+        } else {
+            console.log('aslkdlaksjdfhlkajshdflkajshdfl')
+        }
+    
     }
-
     private startPlayback = (player: Spotify.SpotifyPlayer) => { 
         player.connect();
       }
