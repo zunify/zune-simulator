@@ -29,7 +29,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "homepage": "http://zunify.github.io/zune-simulator",
+  "homepage": "https://zunify.github.io/zune-simulator",
   "browserslist": [
     ">0.2%",
     "not dead",
