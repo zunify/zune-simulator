@@ -35,7 +35,11 @@ const setupPlayer = (token:string):Spotify.SpotifyPlayer => {
         });
 
         // Connect to the player!
-        player.connect(); 
+        player.connect().then(success => {
+            if (success) {
+              console.log('The Web Playback SDK successfully connected to Spotify!');
+            }
+          })
     };
     return player;
 }
@@ -68,7 +72,7 @@ class Zune extends Component<{location: any}, State> {
                         <div className='screen'>
                             <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                                 <img height='200' src='./zune.svg' />
-                                <Button style={{marginTop: '1rem'}} type='primary' href={this.authUrl()} >Login</Button>
+                                <Button style={{backgroundColor: '#1ed760', marginTop: '1rem'}} color='green' href={this.authUrl()} >Authorize<i style={{marginLeft: '0.5rem'}} className="fab fa-spotify"></i></Button>
                             </div>
                         </div>
                     </div>
